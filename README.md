@@ -1,0 +1,1 @@
+"# Django-SimpleJwt-Celery" 
