@@ -9,8 +9,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Notice
-from .customauthentication import IsAuthenticatedWithJWT
-# Create your views here.
+
 
 
 
