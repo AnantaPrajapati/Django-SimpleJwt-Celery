@@ -9,14 +9,24 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Notice
+from .customauthentication import IsAuthenticatedWithJWT
+from .tasks import reverse
+from rest_framework.decorators import api_view
+# from simplejwt.celery import add
+# from .tasks import send_email
 
-
-
+@api_view(['GET'])
+def test(request):
+     result = reverse.delay("hello world !!")
+     result.get(timeout=10)
 
 class RegisterUserViewset(viewsets.ModelViewSet):
        queryset = UserData.objects.all()
        serializer_class = UserSeriazlier
        permission_classes = [permissions.AllowAny]
+       authentication_classes = []
+
+
        
      # @action(methods=['post'], detail = False, permission_classes =[permissions.AllowAny])
        def create(self, request):
@@ -106,6 +116,8 @@ class NoticeViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         notices = self.get_queryset()
+     #    result = add.delay(10, 20)
+     #    print("result :", result)
         serializer = NoticeSerializer(notices, many = True)
         return Response({"notices":serializer.data}, status = status.HTTP_200_OK)
     

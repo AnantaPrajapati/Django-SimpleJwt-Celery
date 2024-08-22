@@ -12,6 +12,7 @@ router.register(r'View', views.NoticeViewSet, basename='view')
 urlpatterns = [
     # path('login/', views.CustomUserViewSet, name='register'),
     path('', include(router.urls)),
+    path('test/', views.test, name = 'test')
 
 
 ]

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,6 +45,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'cloudinary',
     'cloudinary_storage',
+    'django_celery_results',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -97,6 +100,16 @@ DATABASES = {
         'PORT': '5432',       
     }
 }
+
+# CACHES = {
+#    "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": f"redis://127.0.0.1:6379/0",
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         },
+#     }
+# }
 
 
 # Password validation
@@ -185,6 +198,23 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 #celery configurations 
-CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
-CELERY_TIMEZONE = "Asia/Kathmandu"
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TIMEZONE = 'Asia/Kathmandu'
+CELERY_CACHE_BACKEND = 'django-cache'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
 
+#Enables extended task result attributes (name, args, kwargs, worker, 
+# retires, queue, delivery_info) to be writtern to backend.
+CELERY_RESULT_EXTENDED = True
+
+# Method 1
+# CELERY_BEAT_SCHEDULE = {
+#     # 'every-10-seconds':{
+#     #     'task':'jwtauth.tasks.clear_session_cache',
+#     #     'schedule': crontab(minute='*/1'),
+#     #     'args':('11111',)
+#     # }
+# }
