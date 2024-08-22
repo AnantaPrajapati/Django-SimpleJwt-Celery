@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework import viewsets, status, permissions
 from .serializers import UserSeriazlier, VerifySerializer, NoticeSerializer, LoginSerializer
@@ -12,13 +13,19 @@ from .models import Notice
 from .customauthentication import IsAuthenticatedWithJWT
 from .tasks import reverse
 from rest_framework.decorators import api_view
+from .tasks import send_mail_all
 # from simplejwt.celery import add
 # from .tasks import send_email
 
+@api_view(['POST'])
+def send_email(request):
+     send_mail_all.delay()
+     return HttpResponse("Email sent successfully")
+
 @api_view(['GET'])
 def test(request):
-     result = reverse.delay("hello world !!")
-     result.get(timeout=10)
+     reverse.delay("hello")
+     return HttpResponse("Done")
 
 class RegisterUserViewset(viewsets.ModelViewSet):
        queryset = UserData.objects.all()
@@ -106,6 +113,30 @@ class LoginViewSet(viewsets.ModelViewSet):
              samesite='lax',
         )
         return response
+
+
+class AddNotice(viewsets.ModelViewSet):
+     queryset = Notice.objects.all()
+     serializer_class = NoticeSerializer
+     http_method_names  = ['post']
+     authentication_classes = [IsAuthenticatedWithJWT]
+     permission_classes = [permissions.IsAuthenticated] 
+
+
+     def create(list, request):
+          serializer = NoticeSerializer(data = request.data)
+          serializer.is_valid(raise_exception = True)
+
+          # title = serializer.validated_data['title']
+          # description = serializer.validated_data['description']
+          # image = serializer.validated_data['image']
+
+          if serializer.is_valid():
+               serializer.save()
+               return Response(serializer.data, status =status.HTTP_200_OK)
+          else:
+               return Response(serializer.error_messages, status = status.HTTP_400_BAD_REQUEST)
+
 
 class NoticeViewSet(viewsets.ModelViewSet):
     queryset = Notice.objects.all()

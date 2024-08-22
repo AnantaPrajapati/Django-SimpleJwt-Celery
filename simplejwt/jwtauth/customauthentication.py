@@ -15,14 +15,14 @@ class IsAuthenticatedWithJWT(BaseAuthentication):
         try:
             #decoding token
             access_token = AccessToken(jwt_token)
-            print("Decoded token claims:", access_token) 
-            #gets the user id by decoding code
+            # print("Decoded token claims:", access_token) 
+            # #gets the user id by decoding code
             user_id = access_token.get('user_id')
-            print(f"Extracted user_user_id: {user_id}")
+            # print(f"Extracted user_user_id: {user_id}")
              
             #filters the id of the user
             user = UserData.objects.filter(id = user_id).first()
-            print(f"User : {user}")
+            # print(f"User : {user}")
 
             if user and user.is_authenticated:
 

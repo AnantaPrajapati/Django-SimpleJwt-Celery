@@ -3,6 +3,7 @@ from .models import UserData, Notice, NoticeImage
 from .auth import generate_otp
 from django.core.mail import send_mail
 from django.conf import settings
+from .tasks import send_mail_one
 # from .tasks import send_Email
 
 class UserSeriazlier(serializers.ModelSerializer):
@@ -21,17 +22,17 @@ class UserSeriazlier(serializers.ModelSerializer):
             name=validated_data['name'],
             password=validated_data['password']
         )
-        # send_Email.delay(user.pk)
-        otp = generate_otp()
-        user.otp = otp
-        user.save()
-        send_mail(
-            'Email Verification OTP',
-            f'Your OTP for email verification is : {otp}',
-            settings.EMAIL_HOST_USER,
-            [validated_data['email']],
-            fail_silently = False
-        )
+        send_mail_one.delay(user.id)
+        # otp = generate_otp()
+        # user.otp = otp
+        # user.save()
+        # send_mail(
+        #     'Email Verification OTP',
+        #     f'Your OTP for email verification is : {otp}',
+        #     settings.EMAIL_HOST_USER,
+        #     [validated_data['email']],
+        #     fail_silently = False
+        # )
         return user
     
 class LoginSerializer(serializers.Serializer):

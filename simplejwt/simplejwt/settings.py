@@ -156,6 +156,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'infoReportARoad@gmail.com'
 EMAIL_HOST_PASSWORD = 'gkbiewsgdmbyvich'
+DEFAULT_FROM_EMAIL = 'celery <anantaprajapati0@gmail.com>'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -212,9 +213,9 @@ CELERY_RESULT_EXTENDED = True
 
 # Method 1
 # CELERY_BEAT_SCHEDULE = {
-#     # 'every-10-seconds':{
-#     #     'task':'jwtauth.tasks.clear_session_cache',
-#     #     'schedule': crontab(minute='*/1'),
-#     #     'args':('11111',)
-#     # }
+#     'every-10-seconds':{
+#         'task':'jwtauth.tasks.reverse',
+#         'schedule': crontab(minute='*/1'),
+#         'args':('11111',)
+#     }
 # }
