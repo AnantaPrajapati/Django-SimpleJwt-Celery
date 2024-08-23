@@ -1,3 +1,4 @@
+from http.client import HTTPResponse
 from celery import shared_task
 from .models import UserData
 from django.core.mail import send_mail
@@ -46,3 +47,8 @@ def send_mail_all(self):
             fail_silently=False
         )
     return "OK"
+
+
+@shared_task
+def hello():
+    return "Hello from the other world"

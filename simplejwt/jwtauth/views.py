@@ -13,14 +13,19 @@ from .models import Notice
 from .customauthentication import IsAuthenticatedWithJWT
 from .tasks import reverse
 from rest_framework.decorators import api_view
-from .tasks import send_mail_all
+from .tasks import send_mail_all, hello
 # from simplejwt.celery import add
 # from .tasks import send_email
 
 @api_view(['POST'])
 def send_email(request):
-     send_mail_all.delay()
+     send_mail_all.apply_async(countdown = 60)
      return HttpResponse("Email sent successfully")
+
+@api_view(['POST'])
+def send_hello(request):
+     hello.delay()
+     return HttpResponse("Done")
 
 @api_view(['GET'])
 def test(request):

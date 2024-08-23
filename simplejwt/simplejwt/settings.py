@@ -213,7 +213,7 @@ CELERY_RESULT_EXTENDED = True
 
 # Method 1
 # CELERY_BEAT_SCHEDULE = {
-#     'every-10-seconds':{
+#     'every-5-minutes':{
 #         'task':'jwtauth.tasks.reverse',
 #         'schedule': crontab(minute='*/1'),
 #         'args':('11111',)

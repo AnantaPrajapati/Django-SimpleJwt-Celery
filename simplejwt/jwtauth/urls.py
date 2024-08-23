@@ -13,5 +13,6 @@ urlpatterns = [
     # path('login/', views.CustomUserViewSet, name='register'),
     path('', include(router.urls)),
     path('test/', views.test, name = 'test'),
-    path('sendmail/', views.send_email, name ='sendmail')
+    path('sendmail/', views.send_email, name ='sendmail'),
+    path('hello/', views.send_hello, name= 'hello')
 ]

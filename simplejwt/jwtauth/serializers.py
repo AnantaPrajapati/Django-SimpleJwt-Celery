@@ -23,6 +23,7 @@ class UserSeriazlier(serializers.ModelSerializer):
             password=validated_data['password']
         )
         send_mail_one.delay(user.id)
+        # send_mail_one.apply_async(args = [user.id], countdown = 60)
         # otp = generate_otp()
         # user.otp = otp
         # user.save()
